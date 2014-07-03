@@ -101,7 +101,7 @@ class MozLDAP(object):
 
 	def get_all_disabled_users(self):
 		"""
-		desc: like getAllEnabledUsers but only return disabled users (inverse function)
+		desc: like get_all_enabled_users but only return disabled users (inverse function)
 
 		return: ['mail=gdestuynder@mozilla.com,o=com,dc=mozilla', 'mail=gdestuynder2@mozilla.com,o=com,dc=mozilla' ...]"""
 		res = self.query("(&(employeeType=DISABLED)(mail=*))", ['dn'])
