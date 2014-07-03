@@ -16,7 +16,7 @@ LDAP_BIND_PASSWD=''
 
 def main():
 	l = mozlibldap.MozLDAP(LDAP_URL, LDAP_BIND_DN, LDAP_BIND_PASSWD)
-	x=l.getUserUID("gdestuynder@mozilla.com")
+	x=l.get_user_posix_uid("gdestuynder@mozilla.com")
 	print("UID:", x)
 
 if __name__ == "__main__":

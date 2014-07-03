@@ -44,4 +44,4 @@ Usage
 	import mozlibldap
 	
 	l = mozlibldap.MozLDAP(LDAP_URL, LDAP_BIND_DN, LDAP_BIND_PASSWD)
-	print(l.getUserUID("gdestuynder@mozilla.com"))
+	print(l.get_user_posix_uid("gdestuynder@mozilla.com"))

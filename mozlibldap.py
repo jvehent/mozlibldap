@@ -33,7 +33,7 @@ class MozLDAP(object):
 			base = self.base
 		return self.conn.search_s(base, ldap.SCOPE_SUBTREE, filterstr, attrlist)
 
-	def getUserDNByUID(self, uid):
+	def get_user_dn_by_uid(self, uid):
 		"""
 		desc: search for a user's DN
 		res format: [('mail=gdestuynder@mozilla.com,o=com,dc=mozilla', {'uid': ['gdestuynder']})]
@@ -44,7 +44,7 @@ class MozLDAP(object):
 		res = self.query("uidNumber="+str(uid), ['uid'])
 		return res[0][1]['uid'][0]
 
-	def getUserPosixUID(self, dn):
+	def get_user_posix_uid(self, dn):
 		"""
 		desc: search for a user's POSIX UID
 
@@ -55,7 +55,7 @@ class MozLDAP(object):
 		res = self.query("(&("+dn+")(uidNumber=*))", ['uidNumber', 'uid'])
 		return (res[0][1]['uid'][0], int(res[0][1]['uidNumber'][0]))
 
-	def getUserEmail(self, dn):
+	def get_user_email(self, dn):
 		"""
 		desc: search for a user's email
 
@@ -66,7 +66,7 @@ class MozLDAP(object):
 		res = self.query("("+dn+")", ['mail'])
 		return res[0][1]['mail']
 
-	def getUserAttribute(self, dn, attr):
+	def get_user_attribute(self, dn, attr):
 		"""
 		desc: generic function to search for a specific user attribute, granted you know the attribute name. Use
 		specific functions when available as there's safety filters to ensure you get the result you're looking for, and
@@ -79,7 +79,7 @@ class MozLDAP(object):
 		res = self.query("("+dn+")", [attr])
 		return res[0][1][attr]
 
-	def getUserAttributes(self, dn):
+	def get_user_attributes(self, dn):
 		"""
 		desc: search for all user attributes - more resource intensive than dedicated functions! This will return mail,
 		uid, ssh keys, picture, shirt size, phone, etc.
@@ -91,7 +91,7 @@ class MozLDAP(object):
 		res = self.query("("+dn+")")
 		return res[0][1]
 
-	def getAllEnabledUsers(self):
+	def get_all_enabled_users(self):
 		"""
 		desc: search for all non-disabled users and return the DN.
 
@@ -99,7 +99,7 @@ class MozLDAP(object):
 		res = self.query("(&(!(employeeType=DISABLED))(mail=*))", ['dn'])
 		return [x[0] for x in res]
 
-	def getAllDisabledUsers(self):
+	def get_all_disabled_users(self):
 		"""
 		desc: like getAllEnabledUsers but only return disabled users (inverse function)
 
@@ -107,7 +107,7 @@ class MozLDAP(object):
 		res = self.query("(&(employeeType=DISABLED)(mail=*))", ['dn'])
 		return [x[0] for x in res]
 
-	def getAllGroups(self):
+	def get_all_groups(self):
 		"""
 		desc: search for all groups.
 
