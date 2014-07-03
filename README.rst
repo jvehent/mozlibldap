@@ -1,7 +1,8 @@
 mozlibldap
 ==========
 
-Python lib for common OpenLDAP queries @ Mozilla_.
+Python lib for common OpenLDAP queries @ Mozilla.
+This only works with LDAP databases using a schema similar to Mozilla's.
 
 Install
 --------
@@ -38,4 +39,9 @@ Python dependencies
 Usage
 -----
 
-N/A
+.. code::
+
+	import mozlibldap
+	
+	l = mozlibldap.MozLDAP(LDAP_URL, LDAP_BIND_DN, LDAP_BIND_PASSWD)
+	print(l.getUserUID("gdestuynder@mozilla.com"))
