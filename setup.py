@@ -22,7 +22,7 @@ setup(
     keywords = "mozilla ldap",
     url = "https://github.com/mozilla-it/mozlibldap",
     long_description=read('README.rst'),
-	requires=['python-ldap'],
+    install_requires=['python-ldap'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
 		"Topic :: Software Development :: Libraries :: Python Modules",
