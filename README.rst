@@ -22,6 +22,10 @@ As a rpm/deb package
    rpm -i <package.rpm>
    dpkg -i <package.deb>
 
+Testing
+~~~~~~~
+Fill in the LDAP URL, login, password in tests.py and run it :)
+
 From the code/integrate in my code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Add to your project with:

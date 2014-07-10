@@ -10,6 +10,9 @@ all:
 install:
 	./setup.py install
 
+test:
+	./unittests.py
+
 rpm:
 	fpm -s python -t rpm ./setup.py
 
@@ -20,3 +23,5 @@ clean:
 	rm -rf *pyc
 	rm -rf build
 	rm -rf __pycache__
+	rm -rf examples/__pycache__
+	rm -rf examples/*pyc
