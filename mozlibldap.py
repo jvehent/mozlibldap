@@ -21,6 +21,8 @@ class MozLDAP(object):
 		# Auto-fix dn if an email is passed. This is not unique, unlike the dn. In doubt please always use a dn.
 		if not dn.startswith("mail="):
 			dn = "mail="+dn
+		if dn.find(",") != -1:
+			raise Exception('InvalidDnFormat', 'Use mail=user, not a fully qualified DN')
 		return dn
 
 	def query(self, filterstr, attrlist=None, base=None):
@@ -42,13 +44,17 @@ class MozLDAP(object):
 		return: str ex: "gdestuynder"
 		"""
 		res = self.query("uidNumber="+str(uid), ['uid'])
-		return res[0][1]['uid'][0]
+		return res[0][0]
+
+
+	def get_user_posix_username(self, dn):
+		return self.get_user_posix_uid(dn)
 
 	def get_user_posix_uid(self, dn):
 		"""
-		desc: search for a user's POSIX UID
+		desc: search for a user's POSIX UID and POSIX username
 
-		@dn str ex: "mail=user...,o=com,dc=mozilla"
+		@dn str ex: "mail=user" (not fully qualified).
 		return: str,int ex: ('gdestuynder', 1663)
 		"""
 		dn = self._fixdn(dn)
@@ -59,7 +65,7 @@ class MozLDAP(object):
 		"""
 		desc: search for a user's email
 
-		@dn str ex: "mail=user...,o=com,dc=mozilla" 
+		@dn str ex: "mail=user" (not fully qualified) 
 		return: [str] ex: ["gdestuynder@mozilla.com"] (there can be more than one, first entry is the default)
 		"""
 		dn = self._fixdn(dn)
@@ -72,7 +78,7 @@ class MozLDAP(object):
 		specific functions when available as there's safety filters to ensure you get the result you're looking for, and
 		proper typing.
 
-		@dn str ex: "mail=user...,o=com,dc=mozilla" 
+		@dn str ex: "mail=user" (not fully qualified) 
 		return: [attr] type unknown
 		"""
 		dn = self._fixdn(dn)
@@ -84,12 +90,22 @@ class MozLDAP(object):
 		desc: search for all user attributes - more resource intensive than dedicated functions! This will return mail,
 		uid, ssh keys, picture, shirt size, phone, etc.
 
-		@dn str ex: "mail=user...,o=com,dc=mozilla" 
+		@dn str ex: "mail=user" (not fully qualified) 
 		return: {'attr': value, ...}
 		"""
 		dn = self._fixdn(dn)
 		res = self.query("("+dn+")")
 		return res[0][1]
+
+	def get_all_enabled_users_attr(self, attr):
+		"""
+		desc: search for all non-disabled users and return one of their attribute
+
+		@attr str ex: 'sshPublicKey'
+		return: ['dn': {'attr': ['attr..']}, ...] (may also return ['dn', {}] if no attr found or empty)
+		"""
+		res = self.query("(&(!(employeeType=DISABLED))(mail=*))", [attr])
+		return res
 
 	def get_all_enabled_users(self):
 		"""
