@@ -32,7 +32,7 @@ Add to your project with:
 
 .. code::
 
-   git submodule add https://github.com/mozilla-it_lib mozlibldap
+   git submodule add https://github.com/mozilla-it/mozlibldap
    git commit -a
 
 Python dependencies
